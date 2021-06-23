@@ -15,39 +15,28 @@
             @click:append-outer="validateURL"
           />
           <div v-if="isContentValidated">
-            <template v-if="hostType === 'youtube'">
-              <video
-                v-if="response != 'Invalid data' && response != null"
+            <template v-if="['youtube', 'gdrive'].includes(hostType)">
+              <iframe
+                :src="contentURL"
                 width="700"
                 height="500"
-                autoplay
-                :src="
-                  `https://www.youtube.com//${contentId}?key=AIzaSyC_28L2bV2wGcZZqk_0NbReNJBNV4V5BNI`
-                "
-              />
-            </template>
-            <template v-else-if="hostType === 'gdrive'">
-              <video
-                v-if="response != 'Invalid data' && response != null"
-                width="700"
-                height="500"
-                autoplay
-                :src="
-                  `https://www.googleapis.com/drive/v3/files/${contentId}?key=AIzaSyC_28L2bV2wGcZZqk_0NbReNJBNV4V5BNI`
-                "
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
               />
             </template>
             <template v-else-if="hostType === 'custom'">
               <video
-                v-if="response != 'Invalid data' && response != null"
                 width="700"
                 height="500"
                 autoplay
-                :src="
-                  `https://www.googleapis.com/drive/v3/files/${contentId}?key=AIzaSyC_28L2bV2wGcZZqk_0NbReNJBNV4V5BNI`
-                "
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                :src="contentURL"
               />
             </template>
+          </div>
+          <div v-else>
+            Invalid URL
           </div>
         </v-card-text>
         <v-card-actions>
@@ -69,26 +58,36 @@ export default {
       hostType: null,
       mimeType: null,
       contentId: null,
+      isURLValid: false,
       isContentValidated: false,
+      contentURL: null,
+      apiKey: 'AIzaSyC_28L2bV2wGcZZqk_0NbReNJBNV4V5BNI',
     }
   },
   methods: {
     async validateURL () {
       this.hostType = await this.checkHostName(new URL(this.url).hostname)
-      this.mimeType = await this.checkURLConnectivity(this.url)
-      if (this.hostType === 'custom') {
-        this.isContentValidated = [
-          'video/mp4',
-          'video/ogg',
-          'video/webm',
-        ].includes(this.mimeType)
+      this.isURLValid = this.checkURLFormat()
+      if (this.isURLValid) {
+        if (this.hostType === 'custom') {
+          this.mimeType = await this.checkURLConnectivity(this.url)
+          this.isContentValidated = [
+            'video/mp4',
+            'video/ogg',
+            'video/webm',
+          ].includes(this.mimeType)
+        } else {
+          this.isContentValidated = true
+        }
+      } else {
+        this.isContentValidated = false
       }
     },
     checkHostName (hostname) {
       if (!hostname) {
         return false
       }
-      if (hostname.includes('youtube')) {
+      if (hostname.includes('youtube') || hostname.includes('youtu.be')) {
         return 'youtube'
       } else if (hostname.includes('drive')) {
         return 'gdrive'
@@ -96,7 +95,26 @@ export default {
         return 'custom'
       }
     },
-    checkURLFormat () {},
+    checkURLFormat () {
+      if (this.hostType === 'youtube') {
+        this.contentURL = `${this.url}?key=${this.apiKey}`
+        return this.url.match(
+          /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/,
+        )
+      } else if (this.hostType === 'gdrive') {
+        this.contentURL = `https://www.googleapis.com/drive/v3/files/${
+          this.url.split('/')[5]
+        }?key=${this.apiKey}`
+        return this.url.match(
+          /^(https:\/\/drive\.google\.com\/)file\/d\/([^]+)\/.*$/,
+        )
+      } else if (this.hostType === 'custom') {
+        this.contentURL = this.url
+        return this.url.match(
+          /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
+        )
+      }
+    },
     checkURLConnectivity (url) {
       return new Promise(function (resolve) {
         const xhttp = new XMLHttpRequest()
