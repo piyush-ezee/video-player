@@ -97,7 +97,9 @@ export default {
     },
     checkURLFormat () {
       if (this.hostType === 'youtube') {
-        this.contentURL = `${this.url}?key=${this.apiKey}`
+        const regExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/
+        const videoId = this.url.match(regExp)
+        this.contentURL = `https://www.youtube.com/embed/${videoId[1]}?key=${this.apiKey}`
         return this.url.match(
           /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/,
         )
