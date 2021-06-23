@@ -76,11 +76,13 @@ export default {
     async validateURL () {
       this.hostType = await this.checkHostName(new URL(this.url).hostname)
       this.mimeType = await this.checkURLConnectivity(this.url)
-      this.isContentValidated = [
-        'video/mp4',
-        'video/ogg',
-        'video/webm',
-      ].includes(this.mimeType)
+      if (this.hostType === 'custom') {
+        this.isContentValidated = [
+          'video/mp4',
+          'video/ogg',
+          'video/webm',
+        ].includes(this.mimeType)
+      }
     },
     checkHostName (hostname) {
       if (!hostname) {
