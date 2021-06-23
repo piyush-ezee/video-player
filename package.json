@@ -1,0 +1,55 @@
+{
+  "name": "video-player",
+  "version": "1.0.0",
+  "private": true,
+  "author": "Piyush Goyani <piyush.goyani@ezeetechnosys.com>",
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint": "eslint --fix --ext .ts,.js,.vue --ignore-path .gitignore .",
+    "lint:css": "stylelint '**/*.vue' '**/*.scss' --syntax scss"
+  },
+  "lint-staged": {
+    "*.{ts,js,vue}": [
+      "eslint --fix --ext .ts,.js,.vue --ignore-path .gitignore .",
+      "git add"
+    ],
+    "*.{vue,scss}": [
+      "stylelint '**/*.(vue,scss)' --syntax scss --fix",
+      "git add"
+    ]
+  },
+  "browserslist": [
+    "last 3 version",
+    "not ie <= 10"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "post-commit": "git update-index --again"
+    }
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.13.1",
+    "core-js": "^3.9.1",
+    "nuxt": "^2.15.3"
+  },
+  "devDependencies": {
+    "@ezyaez/eslint-config-ez": "^1.0.1",
+    "@ezyaez/stylelint-config-ez": "^1.0.1",
+    "@nuxtjs/vuetify": "^1.11.3",
+    "husky": "^6.0.0",
+    "lint-staged": "^11.0.0",
+    "stylelint-processor-html": "^1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/piyush-ezee/video-player.git"
+  },
+  "bugs": {
+    "url": "https://github.com/piyush-ezee/video-player/issues"
+  },
+  "homepage": "https://github.com/piyush-ezee/video-player#readme"
+}

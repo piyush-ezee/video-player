@@ -1,0 +1,2 @@
+processors: ["stylelint-processor-html"]
+extends: ["@ezyaez/stylelint-config-ez"]
