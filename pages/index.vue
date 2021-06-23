@@ -18,7 +18,7 @@
                 :src="contentURL"
                 width="700"
                 height="500"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allow="Content-Security-Policy: frame-ancestors 'none'; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen
               />
             </template>
@@ -102,9 +102,9 @@ export default {
           /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/,
         )
       } else if (this.hostType === 'gdrive') {
-        this.contentURL = `https://www.googleapis.com/drive/v3/files/${
-          this.url.split('/')[5]
-        }?key=${this.apiKey}`
+        // https://drive.google.com/file/d/1zwNlzfY25YGnpGMInrir0mqqeKQq2xIY/preview
+        // `https://www.googleapis.com/drive/v3/files/${this.url.split('/')[5]}?key=${this.apiKey}`
+        this.contentURL = `https://drive.google.com/file/d/${this.url.split('/')[5]}/preview`
         return this.url.match(
           /^(https:\/\/drive\.google\.com\/)file\/d\/([^]+)\/.*$/,
         )
