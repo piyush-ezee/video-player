@@ -1,16 +1,14 @@
 <template>
   <v-row justify="center" align="center">
     <v-col cols="12" sm="8" md="6">
-      <div class="text-center">
-        <p>test</p>
-      </div>
       <v-card>
-        <v-card-title class="headline">
-          TITLE
+        <v-card-title class="headline mt-5">
+          Video Player
         </v-card-title>
         <v-card-text>
           <v-text-field
             v-model="url"
+            placeholder="Enter Media URL"
             append-outer-icon="mdi-arrow-right"
             @click:append-outer="validateURL"
           />
