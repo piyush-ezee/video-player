@@ -1,6 +1,6 @@
 {
   "name": "video-player",
-  "version": "1.0.0",
+  "version": "v1.0.0-alpha",
   "private": true,
   "author": "Piyush Goyani <piyush.goyani@ezeetechnosys.com>",
   "scripts": {
