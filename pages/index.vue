@@ -55,8 +55,9 @@ export default {
       isContentValidated: false,
       message: '',
       contentURL: null,
-      apiKey: 'AIzaSyC_28L2bV2wGcZZqk_0NbReNJBNV4V5BNI',
       mimeTypes: ['video/mp4', 'video/ogg', 'video/webm'],
+      // apiURL: 'http://localhost:3001',
+      apiURL: 'https://express-player.herokuapp.com',
     }
   },
   methods: {
@@ -119,9 +120,7 @@ export default {
     },
     checkYoutubePermission () {
       this.$axios
-        .get(
-          `https://www.googleapis.com/youtube/v3/videos?id=${this.contentId}&part=snippet,contentDetails&key=${this.apiKey}`,
-        )
+        .get(`${this.apiURL}/check-youtube-permissions?contentId=${this.contentId}`)
         .then((res) => {
           if (res && res.data.items.length === 0) {
             this.isContentValidated = false
@@ -150,9 +149,7 @@ export default {
     },
     checkGDrivePermission () {
       this.$axios
-        .get(
-          `https://www.googleapis.com/drive/v3/files/${this.contentId}?key=${this.apiKey}`,
-        )
+        .get(`${this.apiURL}/check-gdrive-permissions?contentId=${this.contentId}`)
         .then((res) => {
           if (this.mimeTypes.includes(res.data.mimeType)) {
             this.isContentValidated = true

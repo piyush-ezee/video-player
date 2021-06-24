@@ -3,6 +3,8 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 const axios = require('axios').default
+const { response } = require('express')
+const apiKey = 'AIzaSyC_28L2bV2wGcZZqk_0NbReNJBNV4V5BNI'
 const port = 3001
 app.use(cors())
 
@@ -16,11 +18,21 @@ app.get('/check-mime', async (req, res) => {
   }))
 })
 
-app.get('/check-gdrive-permissions', (req, res) => {
-  res.send('Video Player API')
+app.get('/check-gdrive-permissions', async (req, res) => {
+  res.send(await axios.get(`https://www.googleapis.com/drive/v3/files/${req.query.contentId}?key=${apiKey}`).then((response) => {
+    return response.data
+  }))
 })
 
-app.listen(port, () => {
+app.get('/check-youtube-permissions', async (req, res) => {
+  res.send(await axios.get(`https://www.googleapis.com/youtube/v3/videos?id=${req.query.contentId}&part=snippet,contentDetails&key=${apiKey}`).then((response) => {
+    // eslint-disable-next-line no-console
+    console.log(response.data)
+    return response.data
+  }))
+})
+
+app.listen(process.env.PORT || port, '0.0.0.0', () => {
   // eslint-disable-next-line no-console
   console.log(`Example app listening at http://localhost:${port}`)
 })
