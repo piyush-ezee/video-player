@@ -1,12 +1,13 @@
 {
   "name": "video-player",
-  "version": "v1.0.0-alpha.1",
+  "version": "v1.0.0-alpha.2",
   "private": true,
   "author": "Piyush Goyani <piyush.goyani@ezeetechnosys.com>",
   "scripts": {
-    "dev": "nuxt",
+    "dev": "node ./backend/index.js & nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
+    "start-server": "node ./backend/index.js",
     "generate": "nuxt generate",
     "lint": "eslint --fix --ext .ts,.js,.vue --ignore-path .gitignore .",
     "lint:css": "stylelint '**/*.vue' '**/*.scss' --syntax scss"

@@ -75,9 +75,10 @@ export default {
             'video/ogg',
             'video/webm',
           ].includes(this.mimeType)
-        } else {
-          // check access
-          this.isContentValidated = true
+        } else if (this.hostType === 'youtube') {
+          await this.checkYoutubePermission()
+        } else if (this.hostType === 'gdrive') {
+          await this.checkGDrivePermission()
         }
       } else {
         this.isContentValidated = false
@@ -98,17 +99,13 @@ export default {
     checkURLFormat () {
       if (this.hostType === 'youtube') {
         const regExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/
-        const videoId = this.url.match(regExp)
-        this.contentURL = `https://www.youtube.com/embed/${videoId[1]}?key=${this.apiKey}`
+        this.contentId = this.url.match(regExp)[1]
         return this.url.match(
           /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/,
         )
       } else if (this.hostType === 'gdrive') {
-        // https://drive.google.com/file/d/1zwNlzfY25YGnpGMInrir0mqqeKQq2xIY/preview
-        // `https://www.googleapis.com/drive/v3/files/${this.url.split('/')[5]}?key=${this.apiKey}`
-        this.contentURL = `https://drive.google.com/file/d/${
-          this.url.split('/')[5]
-        }/preview`
+        this.contentId = this.url.split('/')[5]
+        this.contentURL = `https://drive.google.com/file/d/${this.contentId}/preview`
         return this.url.match(
           /^(https:\/\/drive\.google\.com\/)file\/d\/([^]+)\/.*$/,
         )
@@ -120,12 +117,56 @@ export default {
       }
     },
     checkURLConnectivity (url) {
-      return this.$axios.head(url).then((res) => {
-        return res.headers['content-type']
+      return this.$axios.get(`http://localhost:3001/check-mime?u=${url}`).then((res) => {
+        return res.data
       })
     },
-    checkYoutubePermission () {},
-    checkGDrivePermission () {},
+    checkYoutubePermission () {
+      this.$axios
+        .get(
+          `https://www.googleapis.com/youtube/v3/videos?id=${this.contentId}&part=snippet,contentDetails&key=${this.apiKey}`,
+        )
+        .then((res) => {
+          if (res && res.data.items.length === 0) {
+            this.isContentValidated = false
+          } else if (
+            res &&
+            res.data.items.length > 0 &&
+            (res.data.items[0].snippet.liveBroadcastContent === 'live' ||
+              res.data.items[0].snippet.liveBroadcastContent === 'upcoming')
+          ) {
+            this.isContentValidated = false
+          } else if (
+            res &&
+            res.data.items.length > 0 &&
+            (res.data.items[0].snippet.liveBroadcastContent === 'none' ||
+              res.data.items[0].snippet.liveBroadcastContent === 'completed')
+          ) {
+            this.isContentValidated = true
+            this.contentURL = `https://www.youtube.com/embed/${res.data.items[0].id}`
+            return this.url.match(
+              /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/,
+            )
+          } else {
+            this.isContentValidated = false
+          }
+        })
+        .catch(() => {
+          this.isContentValidated = false
+        })
+    },
+    checkGDrivePermission () {
+      this.$axios
+        .get(
+          `https://www.googleapis.com/drive/v3/files/${this.contentId}/permissions?key=${this.apiKey}`,
+        )
+        .then((res) => {
+          console.log(res)
+        })
+        .catch(() => {
+          this.isContentValidated = false
+        })
+    },
   },
 }
 </script>
