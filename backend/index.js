@@ -20,6 +20,6 @@ app.get('/check-gdrive-permissions', (req, res) => {
   res.send('Video Player API')
 })
 
-app.listen(port, () => {
+app.listen(process.env.PORT || port, '0.0.0.0', () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
