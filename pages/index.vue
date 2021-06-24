@@ -61,6 +61,7 @@ export default {
       message: '',
       contentURL: null,
       apiKey: 'AIzaSyC_28L2bV2wGcZZqk_0NbReNJBNV4V5BNI',
+      mimeTypes: ['video/mp4', 'video/ogg', 'video/webm'],
     }
   },
   methods: {
@@ -70,11 +71,7 @@ export default {
       if (this.isURLValid) {
         if (this.hostType === 'custom') {
           this.mimeType = await this.checkURLConnectivity(this.url)
-          this.isContentValidated = [
-            'video/mp4',
-            'video/ogg',
-            'video/webm',
-          ].includes(this.mimeType)
+          this.isContentValidated = this.mimeTypes.includes(this.mimeType)
         } else if (this.hostType === 'youtube') {
           await this.checkYoutubePermission()
         } else if (this.hostType === 'gdrive') {
@@ -117,9 +114,11 @@ export default {
       }
     },
     checkURLConnectivity (url) {
-      return this.$axios.get(`http://localhost:3001/check-mime?u=${url}`).then((res) => {
-        return res.data
-      })
+      return this.$axios
+        .get(`http://localhost:3001/check-mime?u=${url}`)
+        .then((res) => {
+          return res.data
+        })
     },
     checkYoutubePermission () {
       this.$axios
@@ -158,10 +157,14 @@ export default {
     checkGDrivePermission () {
       this.$axios
         .get(
-          `https://www.googleapis.com/drive/v3/files/${this.contentId}/permissions?key=${this.apiKey}`,
+          `https://www.googleapis.com/drive/v3/files/${this.contentId}?key=${this.apiKey}`,
         )
         .then((res) => {
-          console.log(res)
+          if (this.mimeTypes.includes(res.data.mimeType)) {
+            this.isContentValidated = true
+          } else {
+            this.isContentValidated = false
+          }
         })
         .catch(() => {
           this.isContentValidated = false
