@@ -58,6 +58,7 @@ export default {
       contentId: null,
       isURLValid: false,
       isContentValidated: false,
+      message: '',
       contentURL: null,
       apiKey: 'AIzaSyC_28L2bV2wGcZZqk_0NbReNJBNV4V5BNI',
     }
@@ -75,6 +76,7 @@ export default {
             'video/webm',
           ].includes(this.mimeType)
         } else {
+          // check access
           this.isContentValidated = true
         }
       } else {
@@ -104,7 +106,9 @@ export default {
       } else if (this.hostType === 'gdrive') {
         // https://drive.google.com/file/d/1zwNlzfY25YGnpGMInrir0mqqeKQq2xIY/preview
         // `https://www.googleapis.com/drive/v3/files/${this.url.split('/')[5]}?key=${this.apiKey}`
-        this.contentURL = `https://drive.google.com/file/d/${this.url.split('/')[5]}/preview`
+        this.contentURL = `https://drive.google.com/file/d/${
+          this.url.split('/')[5]
+        }/preview`
         return this.url.match(
           /^(https:\/\/drive\.google\.com\/)file\/d\/([^]+)\/.*$/,
         )
@@ -116,17 +120,12 @@ export default {
       }
     },
     checkURLConnectivity (url) {
-      return new Promise(function (resolve) {
-        const xhttp = new XMLHttpRequest()
-        xhttp.open('HEAD', url)
-        xhttp.onreadystatechange = function () {
-          if (this.readyState === this.DONE) {
-            resolve(this.getResponseHeader('Content-Type'))
-          }
-        }
-        xhttp.send()
+      return this.$axios.head(url).then((res) => {
+        return res.headers['content-type']
       })
     },
+    checkYoutubePermission () {},
+    checkGDrivePermission () {},
   },
 }
 </script>
