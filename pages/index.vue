@@ -143,9 +143,6 @@ export default {
           ) {
             this.isContentValidated = true
             this.contentURL = `https://www.youtube.com/embed/${res.data.items[0].id}`
-            return this.url.match(
-              /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/,
-            )
           } else {
             this.isContentValidated = false
           }
