@@ -16,16 +16,17 @@
             <template v-if="['youtube', 'gdrive'].includes(hostType)">
               <iframe
                 :src="contentURL"
-                width="700"
-                height="500"
+                width="550"
+                height="250"
                 allow="Content-Security-Policy: frame-ancestors 'none'; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen
+                autoplay
               />
             </template>
             <template v-else-if="hostType === 'custom'">
               <video
-                width="700"
-                height="500"
+                width="550"
+                height="250"
                 autoplay
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen
@@ -37,12 +38,6 @@
             Invalid URL
           </div>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="primary">
-            Continue
-          </v-btn>
-        </v-card-actions>
       </v-card>
     </v-col>
   </v-row>
@@ -66,6 +61,8 @@ export default {
   },
   methods: {
     async validateURL () {
+      this.hostType = null
+      this.contentURL = null
       this.hostType = await this.checkHostName(new URL(this.url).hostname)
       this.isURLValid = this.checkURLFormat()
       if (this.isURLValid) {
@@ -109,7 +106,7 @@ export default {
       } else if (this.hostType === 'custom') {
         this.contentURL = this.url
         return this.url.match(
-          /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
+          /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\\.-]+)+[\w\-\\._~:/?#[\]@!\\$&'\\(\\)\\*\\+,;=.]+$/,
         )
       }
     },
