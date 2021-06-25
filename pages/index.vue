@@ -1,6 +1,34 @@
 <template>
   <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
+    <v-col cols="5" md="5">
+      <div class="mt-5">
+        <h4 class="success--text">
+          Valid URLs
+        </h4>
+        <ul class="mt-2">
+          <li>https://www.youtube.com/watch?v=668nUCeBHyY</li>
+          <li>
+            https://drive.google.com/file/d/1z3POmLuS12FLC0_hksEdVZQWi1gDJ_im/view?usp=sharing
+          </li>
+          <li>
+            https://www.cdc.gov/coronavirus/2019-ncov/videos/psa-side-effects/tnq1000-testimony-mateo-15-safety-en-v01_lowres.mp4
+          </li>
+        </ul>
+        <h4 class="error--text mt-2">
+          Invalid/InAccessible URLs
+        </h4>
+        <ul class="mt-2">
+          <li>https://www.youtube.com/watch?v=yijs5GqmgBU</li>
+          <li>
+            https://drive.google.com/file/d/12NQ9B5pcrMSTHA08ey4s4z8GBA4qXwDj/view?usp=sharing
+          </li>
+          <li>
+            https://www.cdc.gov/coronavirus/2019-ncov/videos/psa-side-effects/tnq1000-testimony-mateo-15-safety-en-v01_lowres.mp
+          </li>
+        </ul>
+      </div>
+    </v-col>
+    <v-col cols="7" md="7">
       <v-card>
         <v-card-title class="headline mt-5">
           Video Player
@@ -104,7 +132,7 @@ export default {
       } else if (this.hostType === 'custom') {
         this.contentURL = this.url
         return this.url.match(
-          /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
+          /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\\.-]+)+[\w\-\\._~:/?#[\]@!\\$&'\\(\\)\\*\\+,;=.]+$/,
         )
       }
     },
@@ -117,7 +145,9 @@ export default {
     },
     checkYoutubePermission () {
       this.$axios
-        .get(`${this.apiURL}/check-youtube-permissions?contentId=${this.contentId}`)
+        .get(
+          `${this.apiURL}/check-youtube-permissions?contentId=${this.contentId}`,
+        )
         .then((res) => {
           if (res && res.data.items.length === 0) {
             this.isContentValidated = false
@@ -146,7 +176,9 @@ export default {
     },
     checkGDrivePermission () {
       this.$axios
-        .get(`${this.apiURL}/check-gdrive-permissions?contentId=${this.contentId}`)
+        .get(
+          `${this.apiURL}/check-gdrive-permissions?contentId=${this.contentId}`,
+        )
         .then((res) => {
           if (this.mimeTypes.includes(res.data.mimeType)) {
             this.isContentValidated = true
