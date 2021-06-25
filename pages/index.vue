@@ -119,12 +119,14 @@ export default {
     checkURLFormat () {
       if (this.hostType === 'youtube') {
         const regExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/
-        this.contentId = this.url.match(regExp)[1]
+        const temp = this.url.match(regExp)
+        this.contentId = temp ? temp[1] : null
         return this.url.match(
           /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/,
         )
       } else if (this.hostType === 'gdrive') {
-        this.contentId = this.url.split('/')[5]
+        const temp = this.url.split('/')[5]
+        this.contentId = temp || null
         this.contentURL = `https://drive.google.com/file/d/${this.contentId}/preview`
         return this.url.match(
           /^(https:\/\/drive\.google\.com\/)file\/d\/([^]+)\/.*$/,
