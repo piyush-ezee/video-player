@@ -44,16 +44,17 @@
             <template v-if="['youtube', 'gdrive'].includes(hostType)">
               <iframe
                 :src="contentURL"
-                width="700"
-                height="500"
+                width="550"
+                height="250"
                 allow="Content-Security-Policy: frame-ancestors 'none'; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen
+                autoplay
               />
             </template>
             <template v-else-if="hostType === 'custom'">
               <video
-                width="700"
-                height="500"
+                width="550"
+                height="250"
                 autoplay
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen
@@ -89,6 +90,8 @@ export default {
   },
   methods: {
     async validateURL () {
+      this.hostType = null
+      this.contentURL = null
       this.hostType = await this.checkHostName(new URL(this.url).hostname)
       this.isURLValid = this.checkURLFormat()
       if (this.isURLValid) {
