@@ -143,7 +143,7 @@ export default {
     },
     checkURLConnectivity (url) {
       return this.$axios
-        .get(`http://localhost:3001/check-mime?u=${url}`)
+        .get(`${this.apiURL}/check-mime?u=${url}`)
         .then((res) => {
           return res.data
         })
