@@ -20,9 +20,14 @@ app.get('/check-mime', async (req, res) => {
 })
 
 app.get('/check-gdrive-permissions', async (req, res) => {
+  const gDriveUrl = `https://www.googleapis.com/drive/v3/files/${req.query.contentId}?alt=media&key=${apiKey}`
   await axios.get(`https://www.googleapis.com/drive/v3/files/${req.query.contentId}?key=${apiKey}`)
     .then((response) => {
-      res.send(response.data)
+      const ar = {
+        ...response.data,
+        gURL: gDriveUrl,
+      }
+      res.send(ar)
     }).catch(() => { res.send(false) })
 })
 

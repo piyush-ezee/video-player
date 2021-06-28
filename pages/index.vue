@@ -41,7 +41,7 @@
             @click:append-outer="validateURL"
           />
           <div v-if="isContentValidated">
-            <template v-if="['youtube', 'gdrive'].includes(hostType)">
+            <template v-if="['youtube'].includes(hostType)">
               <iframe
                 :src="contentURL"
                 width="550"
@@ -51,6 +51,9 @@
                 autoplay
               />
             </template>
+            <video v-else-if="hostType === 'gdrive'" width="550" height="250" controls autoplay>
+              <source :src="contentURL">
+            </video>
             <template v-else-if="hostType === 'custom'">
               <video
                 width="550"
@@ -84,8 +87,8 @@ export default {
       message: '',
       contentURL: null,
       mimeTypes: ['video/mp4', 'video/ogg', 'video/webm'],
-      // apiURL: 'http://localhost:3001',
-      apiURL: 'https://express-player.herokuapp.com',
+      apiURL: 'http://localhost:3001',
+      // apiURL: 'https://express-player.herokuapp.com',
     }
   },
   methods: {
@@ -130,7 +133,8 @@ export default {
       } else if (this.hostType === 'gdrive') {
         const temp = this.url.split('/')[5]
         this.contentId = temp || null
-        this.contentURL = `https://drive.google.com/file/d/${this.contentId}/preview`
+        // this.contentURL = `https://drive.google.com/file/d/${this.contentId}/preview` // ss
+        // this.contentURL = `="https://www.googleapis.com/drive/v3/files/${this.contentId}?alt=media&key=AIzaSyC_28L2bV2wGcZZqk_0NbReNJBNV4V5BNI`
         return this.url.match(
           /^(https:\/\/drive\.google\.com\/)file\/d\/([^]+)\/.*$/,
         )
@@ -186,6 +190,7 @@ export default {
         )
         .then((res) => {
           if (this.mimeTypes.includes(res.data.mimeType)) {
+            this.contentURL = res.data.gURL
             this.isContentValidated = true
           } else {
             this.isContentValidated = false
