@@ -88,7 +88,7 @@ export default {
       isContentValidated: false,
       message: '',
       contentURL: null,
-      mimeTypes: ['video/mp4', 'video/ogg', 'video/webm'],
+      mimeTypes: ['video/mp4', 'video/ogg', 'video/webm', 'video/x-matroska'],
       // apiURL: 'http://localhost:3001',
       apiURL: 'https://express-player.herokuapp.com',
     }
@@ -191,7 +191,6 @@ export default {
         )
         .then((res) => {
           if (this.mimeTypes.includes(res.data.mimeType)) {
-            console.log('res.data', res.data)
             this.contentURL = res.data.gURL
             this.isContentValidated = true
           } else {
