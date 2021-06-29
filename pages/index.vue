@@ -88,7 +88,7 @@ export default {
       isContentValidated: false,
       message: '',
       contentURL: null,
-      mimeTypes: ['video/mp4', 'video/ogg', 'video/webm', 'video/x-matroska'],
+      mimeTypes: ['video/mp4', 'video/ogg', 'video/webm'],
       // apiURL: 'http://localhost:3001',
       apiURL: 'https://express-player.herokuapp.com',
     }
