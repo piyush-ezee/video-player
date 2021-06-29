@@ -41,7 +41,7 @@
             @click:append-outer="validateURL"
           />
           <div v-if="isContentValidated">
-            <template v-if="['youtube'].includes(hostType)">
+            <template v-if="hostType === 'youtube'">
               <iframe
                 :src="contentURL"
                 width="550"
@@ -51,9 +51,11 @@
                 autoplay
               />
             </template>
-            <video v-else-if="hostType === 'gdrive'" width="550" height="250" controls autoplay>
-              <source :src="contentURL">
-            </video>
+            <template v-else-if="hostType === 'gdrive'">
+              <video width="550" height="250" controls autoplay>
+                <source :src="contentURL">
+              </video>
+            </template>
             <template v-else-if="hostType === 'custom'">
               <video
                 width="550"
@@ -95,6 +97,7 @@ export default {
     async validateURL () {
       this.hostType = null
       this.contentURL = null
+      this.isContentValidated = false
       this.hostType = await this.checkHostName(new URL(this.url).hostname)
       this.isURLValid = this.checkURLFormat()
       if (this.isURLValid) {
@@ -146,11 +149,9 @@ export default {
       }
     },
     checkURLConnectivity (url) {
-      return this.$axios
-        .get(`${this.apiURL}/check-mime?u=${url}`)
-        .then((res) => {
-          return res.data
-        })
+      return this.$axios.get(`${this.apiURL}/check-mime?u=${url}`).then((res) => {
+        return res.data
+      })
     },
     checkYoutubePermission () {
       this.$axios
@@ -190,6 +191,7 @@ export default {
         )
         .then((res) => {
           if (this.mimeTypes.includes(res.data.mimeType)) {
+            console.log('res.data', res.data)
             this.contentURL = res.data.gURL
             this.isContentValidated = true
           } else {
