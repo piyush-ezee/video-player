@@ -11,7 +11,6 @@
     <template v-else>
       <video
         id="video_id"
-        controls
         autoplay
         muted
         preload="auto"
