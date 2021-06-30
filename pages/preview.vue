@@ -13,10 +13,9 @@
         id="video_id"
         autoplay
         muted
-        preload="auto"
         :width="windowSize.x"
         :height="windowSize.y"
-        poster="https://media.giphy.com/media/3o7bu3XilJ5BOiSGic/giphy.gif"
+        poster="https://i0.wp.com/thumbs.gfycat.com/LittleBestAmoeba-size_restricted.gif"
       >
         <source :src="contents[initIndex].url" type="video/mp4">
         <source :src="contents[initIndex].url" type="video/ogg">
