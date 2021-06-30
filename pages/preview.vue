@@ -1,24 +1,12 @@
 <template>
   <div>
-    <!-- <template v-for="(content, index) in contents"> -->
-    <template v-if="currentContent.contentType === 'image'">
-      <img :src="currentContent.url">
-    </template>
-    <template v-else-if="currentContent.contentType === 'custom'">
-      <video controls autoplay muted>
-        <source :src="currentContent.url" type="video/mp4">
-        <source :src="currentContent.url" type="video/ogg">
-        <source :src="currentContent.url" type="video/webm">
-      </video>
-    </template>
-    <template v-else>
-      <video controls autoplay muted>
-        <source :src="currentContent.url" type="video/mp4">
-        <source :src="currentContent.url" type="video/ogg">
-        <source :src="currentContent.url" type="video/webm">
-      </video>
-    </template>
-    <!-- </template> -->
+    <img v-if="contents[initIndex].contentType === 'image'" :src="currentContent.url">
+
+    <video v-else controls autoplay muted>
+      <source :src="contents[initIndex].url" type="video/mp4">
+      <source :src="contents[initIndex].url" type="video/ogg">
+      <source :src="contents[initIndex].url" type="video/webm">
+    </video>
   </div>
 </template>
 
@@ -26,6 +14,9 @@
 export default {
   data () {
     return {
+      durationTime: null,
+      duration: 20000,
+      initIndex: 0,
       contents: [
         {
           url:
@@ -70,33 +61,38 @@ export default {
     }
   },
   mounted () {
-    this.processContents(this.contentIndex)
+    this.calculateNextContentIndexToPreview()
   },
   methods: {
-    processContents (contentIndex) {
-      const self = this
-      if (contentIndex < this.contents.length) {
-        this.interval = setInterval(function () {
-          self.currentContent = self.contents[contentIndex]
-          clearInterval(self.interval)
-          self.processContents(self.contentIndex++)
-        }, this.calculateMS(this.contents[this.contentIndex].duration))
-      } else {
-        this.contentIndex = 0
-        clearInterval(this.interval)
-        this.processContents(this.contentIndex)
+    contentDuration (val) {
+      let timesplit = []
+      timesplit = val.split(':')
+      let total = 0
+      total = (Number((timesplit[0] * 60) * 60) + Number(timesplit[1] * 60) + Number(timesplit[2])) * 1000
+      return total
+    },
+    calculateNextContentIndexToPreview () {
+      if (this.contents.length > 0) {
+        if (this.durationTime) {
+          clearTimeout(this.durationTime)
+        }
+        this.durationTime = setTimeout(() => { this.startInterval() }, this.contentDuration(this.contents[0].duration))
       }
     },
-    calculateMS (duration) {
-      let timesplit = []
-      timesplit = duration.split(':')
-      let total = 0
-      total =
-        (Number(timesplit[0] * 60 * 60) +
-          Number(timesplit[1] * 60) +
-          Number(timesplit[2])) *
-        1000
-      return total
+    startInterval () {
+      const contentListLength = Object.keys(this.contents).length
+      if (contentListLength) {
+        if (this.initIndex !== contentListLength - 1) {
+          this.initIndex = this.initIndex + 1
+          this.currentContent = this.contents[this.initIndex]
+          this.duration = this.contentDuration(this.contents[this.initIndex].duration)
+        } else {
+          self.initIndex = 0
+          this.currentContent = this.contents[0]
+          this.duration = this.contentDuration(this.contents[this.initIndex].duration)
+        }
+        this.durationTime = setTimeout(this.startInterval, this.duration)
+      }
     },
   },
 }
@@ -111,7 +107,6 @@ video {
   width: auto;
   height: auto;
   background-size: cover;
-  /* object-fit: fill; */
 }
 img {
   min-width: 100%;
