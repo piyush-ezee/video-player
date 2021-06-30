@@ -20,7 +20,8 @@
       >
         <source :src="contents[initIndex].url" type="video/mp4">
         <source :src="contents[initIndex].url" type="video/ogg">
-        <source :src="contents[initIndex].url" type="video/webm"></video>
+        <source :src="contents[initIndex].url" type="video/webm">
+      </video>
     </template>
   </div>
 </template>
@@ -34,7 +35,6 @@ export default {
       initIndex: 0,
       windowSize: { x: window.innerWidth, y: window.innerHeight },
       contents: [
-
         {
           url:
             'https://www.googleapis.com/drive/v3/files/1WfIDvoGKuCfveBqPjp-JFM0jDh1j3wGF?alt=media&key=AIzaSyC_28L2bV2wGcZZqk_0NbReNJBNV4V5BNI',
@@ -97,7 +97,7 @@ export default {
       }
     },
     startInterval () {
-      const contentListLength = Object.keys(this.contents).length
+      const contentListLength = this.contents.length
       if (contentListLength) {
         const videoElement = document.getElementById('video_id')
         if (videoElement != null) {
@@ -113,7 +113,7 @@ export default {
             this.contents[this.initIndex].duration,
           )
         } else {
-          self.initIndex = 0
+          this.initIndex = 0
           this.currentContent = this.contents[0]
           this.duration = this.contentDuration(
             this.contents[this.initIndex].duration,
