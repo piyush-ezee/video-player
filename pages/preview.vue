@@ -1,15 +1,17 @@
 <template>
   <div>
-    <template v-for="(content, index) in contents">
-      <template v-if="content.contentType === 'image'">
-        <img :key="index" :src="content.url">
-      </template>
-      <template v-else>
-        <video :key="index" width="auto" height="auto" controls autoplay>
-          <source :src="content.url">
-        </video>
-      </template>
+    <!-- <template v-for="(content, index) in contents"> -->
+    <template v-if="currentContent.contentType === 'image'">
+      <img :src="currentContent.url">
     </template>
+    <template v-else>
+      <video controls autoplay muted>
+        <source :src="currentContent.url" type="video/mp4">
+        <source :src="currentContent.url" type="video/ogg">
+        <source :src="currentContent.url" type="video/webm">
+      </video>
+    </template>
+    <!-- </template> -->
   </div>
 </template>
 
@@ -17,6 +19,7 @@
 export default {
   data () {
     return {
+      currentContent: {},
       contents: [
         {
           url:
@@ -34,7 +37,7 @@ export default {
           url:
             'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
           contentType: 'custom',
-          duration: '00:00:40',
+          duration: '00:00:20',
         },
         {
           url:
@@ -46,19 +49,35 @@ export default {
           url:
             'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
           contentType: 'custom',
-          duration: '00:00:30',
+          duration: '00:00:15',
         },
         {
           url:
             'https://www.googleapis.com/drive/v3/files/1WfIDvoGKuCfveBqPjp-JFM0jDh1j3wGF?alt=media&key=AIzaSyC_28L2bV2wGcZZqk_0NbReNJBNV4V5BNI',
           contentType: 'gdrive',
-          duration: '00:01:00',
+          duration: '00:00:10',
         },
       ],
     }
   },
-  mounted () {},
+  mounted () {
+    this.processContents()
+  },
   methods: {
+    processContents () {
+      const self = this
+      for (let i = 0; i < this.contents.length; i++) {
+        task(this.contents[i])
+      }
+
+      function task (content) {
+        setTimeout(function () {
+          self.currentContent = {}
+          self.currentContent = content
+          console.log(self.calculateMS(content.duration))
+        }, self.calculateMS(content.duration))
+      }
+    },
     calculateMS (duration) {
       let timesplit = []
       timesplit = duration.split(':')
@@ -83,14 +102,13 @@ video {
   min-height: 100%;
   width: auto;
   height: auto;
-  z-index: -100;
   background-size: cover;
-  object-fit: fill;
+  /* object-fit: fill; */
 }
 img {
   min-width: 100%;
   min-height: 100%;
-  width: auto;
-  height: auto;
+  max-height: 100%;
+  max-width: 100%;
 }
 </style>
