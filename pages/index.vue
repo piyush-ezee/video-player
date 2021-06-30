@@ -71,6 +71,12 @@
             Invalid URL
           </div>
         </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn class="primary" to="/preview">
+            Preview Player
+          </v-btn>
+        </v-card-actions>
       </v-card>
     </v-col>
   </v-row>
