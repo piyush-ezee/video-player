@@ -36,8 +36,7 @@ export default {
       contents: [
 
         {
-          url:
-            'https://www.googleapis.com/drive/v3/files/1WfIDvoGKuCfveBqPjp-JFM0jDh1j3wGF?alt=media&key=AIzaSyC_28L2bV2wGcZZqk_0NbReNJBNV4V5BNI',
+          url: 'https://www.googleapis.com/drive/v3/files/1WfIDvoGKuCfveBqPjp-JFM0jDh1j3wGF?alt=media&key=AIzaSyC_28L2bV2wGcZZqk_0NbReNJBNV4V5BNI',
           contentType: 'gdrive',
           duration: '00:00:10',
         },
@@ -113,12 +112,13 @@ export default {
             this.contents[this.initIndex].duration,
           )
         } else {
-          self.initIndex = 0
+          this.initIndex = 0
           this.currentContent = this.contents[0]
           this.duration = this.contentDuration(
             this.contents[this.initIndex].duration,
           )
         }
+        console.log(this.initIndex)
         this.durationTime = setTimeout(this.startInterval, this.duration)
       }
     },
