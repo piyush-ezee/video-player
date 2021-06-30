@@ -16,6 +16,7 @@
         preload="auto"
         :width="windowSize.x"
         :height="windowSize.y"
+        poster="https://media.giphy.com/media/3o7bu3XilJ5BOiSGic/giphy.gif"
       >
         <source :src="contents[initIndex].url" type="video/mp4">
         <source :src="contents[initIndex].url" type="video/ogg">
@@ -100,7 +101,7 @@ export default {
         const videoElement = document.getElementById('video_id')
         if (videoElement != null) {
           videoElement.pause()
-          videoElement.removeAttribute('src') // empty source
+          videoElement.removeAttribute('src')
           videoElement.load()
         }
         if (this.initIndex !== contentListLength - 1) {
@@ -117,7 +118,6 @@ export default {
             this.contents[this.initIndex].duration,
           )
         }
-        console.log(this.initIndex)
         this.durationTime = setTimeout(this.startInterval, this.duration)
       }
     },
