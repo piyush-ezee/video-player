@@ -1,12 +1,15 @@
 <template>
   <div>
-    <img v-if="contents[initIndex].contentType === 'image'" :src="currentContent.url">
+    <template v-if="contents[initIndex].contentType === 'image'">
+      <img :src="currentContent.url">
+    </template>
 
-    <video v-else controls autoplay muted>
-      <source :src="contents[initIndex].url" type="video/mp4">
-      <source :src="contents[initIndex].url" type="video/ogg">
-      <source :src="contents[initIndex].url" type="video/webm">
-    </video>
+    <template v-else>
+      <video controls autoplay muted>
+        <source :src="contents[initIndex].url" type="video/mp4">
+        <source :src="contents[initIndex].url" type="video/ogg">
+        <source :src="contents[initIndex].url" type="video/webm"></video>
+    </template>
   </div>
 </template>
 
@@ -68,7 +71,11 @@ export default {
       let timesplit = []
       timesplit = val.split(':')
       let total = 0
-      total = (Number((timesplit[0] * 60) * 60) + Number(timesplit[1] * 60) + Number(timesplit[2])) * 1000
+      total =
+        (Number(timesplit[0] * 60 * 60) +
+          Number(timesplit[1] * 60) +
+          Number(timesplit[2])) *
+        1000
       return total
     },
     calculateNextContentIndexToPreview () {
@@ -76,7 +83,9 @@ export default {
         if (this.durationTime) {
           clearTimeout(this.durationTime)
         }
-        this.durationTime = setTimeout(() => { this.startInterval() }, this.contentDuration(this.contents[0].duration))
+        this.durationTime = setTimeout(() => {
+          this.startInterval()
+        }, this.contentDuration(this.contents[0].duration))
       }
     },
     startInterval () {
@@ -85,11 +94,15 @@ export default {
         if (this.initIndex !== contentListLength - 1) {
           this.initIndex = this.initIndex + 1
           this.currentContent = this.contents[this.initIndex]
-          this.duration = this.contentDuration(this.contents[this.initIndex].duration)
+          this.duration = this.contentDuration(
+            this.contents[this.initIndex].duration,
+          )
         } else {
           self.initIndex = 0
           this.currentContent = this.contents[0]
-          this.duration = this.contentDuration(this.contents[this.initIndex].duration)
+          this.duration = this.contentDuration(
+            this.contents[this.initIndex].duration,
+          )
         }
         this.durationTime = setTimeout(this.startInterval, this.duration)
       }
