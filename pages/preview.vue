@@ -10,9 +10,11 @@
 
     <template v-else>
       <video
+        id="video_id"
         controls
         autoplay
         muted
+        preload="auto"
         :width="windowSize.x"
         :height="windowSize.y"
       >
@@ -32,17 +34,18 @@ export default {
       initIndex: 0,
       windowSize: { x: window.innerWidth, y: window.innerHeight },
       contents: [
+
         {
           url:
             'https://www.googleapis.com/drive/v3/files/1WfIDvoGKuCfveBqPjp-JFM0jDh1j3wGF?alt=media&key=AIzaSyC_28L2bV2wGcZZqk_0NbReNJBNV4V5BNI',
           contentType: 'gdrive',
-          duration: '00:00:20',
+          duration: '00:00:10',
         },
         {
           url:
             'https://www.learningcontainer.com/wp-content/uploads/2020/08/Large-Sample-png-Image-download-for-Testing.png',
           contentType: 'image',
-          duration: '00:00:50',
+          duration: '00:00:10',
         },
         {
           url:
@@ -96,9 +99,16 @@ export default {
     startInterval () {
       const contentListLength = Object.keys(this.contents).length
       if (contentListLength) {
+        const videoElement = document.getElementById('video_id')
+        if (videoElement != null) {
+          videoElement.pause()
+          videoElement.removeAttribute('src') // empty source
+          videoElement.load()
+        }
         if (this.initIndex !== contentListLength - 1) {
           this.initIndex = this.initIndex + 1
           this.currentContent = this.contents[this.initIndex]
+
           this.duration = this.contentDuration(
             this.contents[this.initIndex].duration,
           )
