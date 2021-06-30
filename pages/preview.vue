@@ -36,7 +36,8 @@ export default {
       windowSize: { x: window.innerWidth, y: window.innerHeight },
       contents: [
         {
-          url: 'https://www.googleapis.com/drive/v3/files/1WfIDvoGKuCfveBqPjp-JFM0jDh1j3wGF?alt=media&key=AIzaSyC_28L2bV2wGcZZqk_0NbReNJBNV4V5BNI',
+          url:
+            'https://www.googleapis.com/drive/v3/files/1WfIDvoGKuCfveBqPjp-JFM0jDh1j3wGF?alt=media&key=AIzaSyC_28L2bV2wGcZZqk_0NbReNJBNV4V5BNI',
           contentType: 'gdrive',
           duration: '00:00:10',
         },
@@ -107,7 +108,9 @@ export default {
         if (this.initIndex !== contentListLength - 1) {
           this.initIndex = this.initIndex + 1
           this.currentContent = this.contents[this.initIndex]
-
+          videoElement?.addEventListener('durationchange', function () {
+            console.log('Duration change Seconds - ', videoElement.duration)
+          })
           this.duration = this.contentDuration(
             this.contents[this.initIndex].duration,
           )
