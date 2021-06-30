@@ -1,11 +1,21 @@
 <template>
   <div>
     <template v-if="contents[initIndex].contentType === 'image'">
-      <img :src="currentContent.url">
+      <img
+        :src="contents[initIndex].url"
+        :width="windowSize.x"
+        :height="windowSize.y"
+      >
     </template>
 
     <template v-else>
-      <video controls autoplay muted>
+      <video
+        controls
+        autoplay
+        muted
+        :width="windowSize.x"
+        :height="windowSize.y"
+      >
         <source :src="contents[initIndex].url" type="video/mp4">
         <source :src="contents[initIndex].url" type="video/ogg">
         <source :src="contents[initIndex].url" type="video/webm"></video>
@@ -20,13 +30,8 @@ export default {
       durationTime: null,
       duration: 20000,
       initIndex: 0,
+      windowSize: { x: window.innerWidth, y: window.innerHeight },
       contents: [
-        {
-          url:
-            'https://www.cdc.gov/coronavirus/2019-ncov/videos/psa-side-effects/tnq1000-testimony-mateo-15-safety-en-v01_lowres.mp4',
-          contentType: 'custom',
-          duration: '00:00:15',
-        },
         {
           url:
             'https://www.googleapis.com/drive/v3/files/1WfIDvoGKuCfveBqPjp-JFM0jDh1j3wGF?alt=media&key=AIzaSyC_28L2bV2wGcZZqk_0NbReNJBNV4V5BNI',
@@ -37,7 +42,7 @@ export default {
           url:
             'https://www.learningcontainer.com/wp-content/uploads/2020/08/Large-Sample-png-Image-download-for-Testing.png',
           contentType: 'image',
-          duration: '00:00:10',
+          duration: '00:00:50',
         },
         {
           url:
@@ -111,20 +116,5 @@ export default {
 }
 </script>
 <style scoped>
-video {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  background-size: cover;
-}
-img {
-  min-width: 100%;
-  min-height: 100%;
-  max-height: 100%;
-  max-width: 100%;
-}
+
 </style>
