@@ -35,34 +35,29 @@ export default {
       windowSize: { x: window.innerWidth, y: window.innerHeight },
       contents: [
         {
-          url:
-            'https://www.googleapis.com/drive/v3/files/1WfIDvoGKuCfveBqPjp-JFM0jDh1j3wGF?alt=media&key=AIzaSyC_28L2bV2wGcZZqk_0NbReNJBNV4V5BNI',
+          url: 'https://drive.google.com/uc?export=download&id=1Wt9T-_pFYEcnOw2Gc2dyH1aOcFdtGQYx',
           contentType: 'gdrive',
-          duration: '00:00:10',
+          duration: '00:00:15',
         },
         {
-          url:
-            'https://www.learningcontainer.com/wp-content/uploads/2020/08/Large-Sample-png-Image-download-for-Testing.png',
+          url: 'https://www.learningcontainer.com/wp-content/uploads/2020/08/Large-Sample-png-Image-download-for-Testing.png',
           contentType: 'image',
           duration: '00:00:10',
         },
         {
-          url:
-            'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+          url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
           contentType: 'custom',
           duration: '00:00:20',
         },
         {
-          url:
-            'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+          url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
           contentType: 'custom',
           duration: '00:00:15',
         },
         {
-          url:
-            'https://www.googleapis.com/drive/v3/files/1WfIDvoGKuCfveBqPjp-JFM0jDh1j3wGF?alt=media&key=AIzaSyC_28L2bV2wGcZZqk_0NbReNJBNV4V5BNI',
+          url: 'https://drive.google.com/uc?export=download&id=1WfIDvoGKuCfveBqPjp-JFM0jDh1j3wGF',
           contentType: 'gdrive',
-          duration: '00:00:10',
+          duration: '00:00:20',
         },
       ],
       currentContent: {},
