@@ -40,8 +40,8 @@ export default {
           duration: '00:00:30',
         },
         {
-          url: 'https://drive.google.com/uc?export=download&id=1z3POmLuS12FLC0_hksEdVZQWi1gDJ_im',
-          contentType: 'gdrive',
+          url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+          contentType: 'custom',
           duration: '00:00:30',
         },
         {
